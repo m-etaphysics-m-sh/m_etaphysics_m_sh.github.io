@@ -66,7 +66,6 @@ button{font:inherit;color:inherit}
 .hello h1 b{font-weight:800;color:var(--accent);text-shadow:0 0 .55em var(--glow);transition:color .6s,text-shadow .6s}
 .chip{display:none;font:500 11px/1 var(--f-mono);letter-spacing:.1em;border:1px solid var(--line);border-radius:99px;padding:6px 10px;color:var(--mut)}
 
-.sample .chip{display:inline-block}
 .hello h1{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
 .empty{color:var(--mut);margin:0}
 .lenses{
@@ -241,6 +240,11 @@ button{font:inherit;color:inherit}
 #wipe span{font:800 clamp(56px,16vw,180px)/1 var(--f-display);letter-spacing:-.02em;color:#07140b;text-align:center;padding:0 16px}
 
 /* admin */
+.sw-row{align-items:center;gap:10px}
+.sw{width:40px;height:40px;border-radius:50%;border:2px solid rgba(255,255,255,.25);background:var(--c);cursor:pointer;box-shadow:0 0 14px var(--c);padding:0}
+.sw[aria-pressed="true"]{border-color:#fff;box-shadow:0 0 0 3px rgba(255,255,255,.35),0 0 20px var(--c)}
+.sw-own{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:var(--mut)}
+.sw-custom{width:40px;height:40px;padding:0;border:2px solid rgba(255,255,255,.25);border-radius:50%;background:none;cursor:pointer}
 #admin{position:fixed;inset:0;z-index:70;overflow:auto;-webkit-overflow-scrolling:touch;background:rgba(3,10,6,.97);color:var(--fg);
   padding:max(14px,env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) 0 max(16px,env(safe-area-inset-left,0px))}
 .a-wrap{max-width:780px;margin:0 auto;display:grid;gap:14px;padding-bottom:150px}
@@ -299,7 +303,6 @@ textarea.ain{resize:none;overflow:hidden}
       <p class="eyebrow">History</p>
       <h2>연혁</h2>
       <p>지나온 시간을 순서대로 모았어요. 항목을 누르면 이야기가 펼쳐져요.</p>
-      <span class="chip">예시 내용</span>
     </header>
     <div class="tl" id="tl"></div>
   </section>
@@ -310,7 +313,6 @@ textarea.ain{resize:none;overflow:hidden}
       <p class="eyebrow">Dream</p>
       <h2>되고 싶은 것</h2>
       <p>양옆 화살표를 누르거나 카드를 옆으로 밀어서 돌려 보세요.</p>
-      <span class="chip">예시 내용</span>
     </header>
     <div class="dream-stage">
       <button type="button" class="arrow" id="dprev" aria-label="이전 카드">‹</button>
@@ -328,19 +330,17 @@ textarea.ain{resize:none;overflow:hidden}
       <a class="back" href="#main">← 메인으로</a>
       <p class="eyebrow">Column</p>
       <h2>칼럼</h2>
-      <p>제 생각을 길게 적은 글이에요. 카드를 누르면 읽기 화면이 열려요.</p>
-      <span class="chip">예시 내용</span>
+      <p>제 생각을 적은 글이에요.</p>
     </header>
     <div class="cgrid" id="cgrid"></div>
   </section>
 
-  <section class="view panel" id="v-writing" hidden aria-label="기고">
+  <section class="view panel" id="v-writing" hidden aria-label="집필">
     <header class="phead">
       <a class="back" href="#main">← 메인으로</a>
       <p class="eyebrow">Writing</p>
-      <h2>기고</h2>
-      <p>다른 곳에 실린 글을 모았어요. 손가락이나 커서를 따라 빛이 움직여요.</p>
-      <span class="chip">예시 내용</span>
+      <h2>집필</h2>
+      <p>제가 남긴 글을 모았어요.</p>
     </header>
     <ol class="wr" id="wr"></ol>
   </section>
@@ -351,7 +351,6 @@ textarea.ain{resize:none;overflow:hidden}
       <p class="eyebrow">Contact</p>
       <h2>연락처</h2>
       <p>아래 주소를 복사해서 편한 곳으로 연락 주세요.</p>
-      <span class="chip">예시 내용</span>
     </header>
     <div class="cgrid2" id="contacts"></div>
     <p class="note">화면을 누르면 잎이 살랑거려요.</p>
@@ -387,7 +386,7 @@ var THEMES={
   history:{ko:'연혁',         en:'HISTORY', a:'#ffc766',bg:['#6b4a14','#120a03'],g0:'#2e2208',g1:'#f2c75e',f:'#ffd98a'},
   dream:  {ko:'되고 싶은 것', en:'DREAM',   a:'#6ff0d4',bg:['#0f5e5a','#020f10'],g0:'#06302f',g1:'#73ecd0',f:'#d6fff6'},
   column: {ko:'칼럼',         en:'COLUMN',  a:'#ff8cc4',bg:['#6a2750','#12040e'],g0:'#1f2a1c',g1:'#ff9ec9',f:'#ffc4e0'},
-  writing:{ko:'기고',         en:'WRITING', a:'#b3a6ff',bg:['#3a3190','#070516'],g0:'#141b3d',g1:'#b9acff',f:'#e4dcff'},
+  writing:{ko:'집필',         en:'WRITING', a:'#b3a6ff',bg:['#3a3190','#070516'],g0:'#141b3d',g1:'#b9acff',f:'#e4dcff'},
   contact:{ko:'연락처',       en:'CONTACT', a:'#c8ff6a',bg:['#3f7418','#071003'],g0:'#173309',g1:'#cdf76c',f:'#fff3b0'}
 };
 var NAMES=['history','dream','column','writing','contact'];
@@ -395,7 +394,9 @@ var NAMES=['history','dream','column','writing','contact'];
 var POS={history:[17,30,1,16,6.2,-1],dream:[52,16,1.2,30,7.4,-3],column:[83,38,1,12,5.6,-2],writing:[31,72,1.12,24,6.8,-4],contact:[70,76,0.96,10,6,-5]};
 
 /* ---------- 내용 (처음 보이는 예시. 실제 내용은 관리 화면에서 고치면 data/content.json 에 저장돼요) ---------- */
-var DREAM_RGB=['92,240,255','61,242,181','150,200,255','120,255,210','185,255,240','110,225,255'];
+var NEON=[['#5cf0ff','하늘'],['#3df2b5','민트'],['#8fb4ff','파랑'],['#b69cff','보라'],['#ff6fb1','분홍'],['#ff8f6b','산호'],['#ffd84d','노랑'],['#b9ff5c','연두']];
+var HEX_OK=/^#[0-9a-fA-F]{6}$/;
+function dreamColor(d,i){return HEX_OK.test(d.c||'')?d.c:NEON[i%NEON.length][0]}
 var DEFAULTS={
   name:'문성현',
   history:[
@@ -406,12 +407,12 @@ var DEFAULTS={
     {y:'2026',t:'나를 소개하는 페이지 만들기',d:'지금 보고 계신 이 페이지예요.'}
   ],
   dreams:[
-    {a:'만드는',b:'사람',d:'머릿속 장면을 실제로 움직이는 것으로 만드는 사람이 되고 싶어요.'},
-    {a:'설명하는',b:'사람',d:'어려운 내용을 쉬운 말로 풀어서 전해 주는 사람이 되고 싶어요.'},
-    {a:'글 쓰는',b:'사람',d:'오래 읽히는 글을 꾸준히 쓰는 사람이 되고 싶어요.'},
-    {a:'함께 하는',b:'사람',d:'혼자보다 같이 할 때 더 멀리 가는 팀을 만드는 사람이 되고 싶어요.'},
-    {a:'계속 배우는',b:'사람',d:'모르는 것을 부끄러워하지 않고 계속 묻는 사람이 되고 싶어요.'},
-    {a:'도전하는',b:'사람',d:'낯선 일 앞에서 먼저 손을 들어 보는 사람이 되고 싶어요.'}
+    {a:'만드는',b:'사람',c:'#5cf0ff',d:'머릿속 장면을 실제로 움직이는 것으로 만드는 사람이 되고 싶어요.'},
+    {a:'설명하는',b:'사람',c:'#3df2b5',d:'어려운 내용을 쉬운 말로 풀어서 전해 주는 사람이 되고 싶어요.'},
+    {a:'글 쓰는',b:'사람',c:'#8fb4ff',d:'오래 읽히는 글을 꾸준히 쓰는 사람이 되고 싶어요.'},
+    {a:'함께 하는',b:'사람',c:'#b69cff',d:'혼자보다 같이 할 때 더 멀리 가는 팀을 만드는 사람이 되고 싶어요.'},
+    {a:'계속 배우는',b:'사람',c:'#ff6fb1',d:'모르는 것을 부끄러워하지 않고 계속 묻는 사람이 되고 싶어요.'},
+    {a:'도전하는',b:'사람',c:'#ffd84d',d:'낯선 일 앞에서 먼저 손을 들어 보는 사람이 되고 싶어요.'}
   ],
   columns:[
     {id:'c3',date:'2026.09',t:'초점이 나간 풍경이 오래 남는 이유',ex:'선명하지 않은 장면이 오히려 기억에 오래 남을 때가 있어요.',tags:['사진','생각'],
@@ -444,7 +445,7 @@ function norm(r){
   var d={};
   d.name=S(r.name,30)||DEFAULTS.name;
   d.history=A(r.history,80).map(function(x){x=x||{};return {y:S(x.y,20),t:S(x.t,120),d:S(x.d,3000)}});
-  d.dreams=A(r.dreams,24).map(function(x){x=x||{};return {a:S(x.a,20),b:S(x.b,20),d:S(x.d,600)}});
+  d.dreams=A(r.dreams,24).map(function(x){x=x||{};return {a:S(x.a,20),b:S(x.b,20),d:S(x.d,600),c:HEX_OK.test(S(x.c,7))?x.c.toLowerCase():''}});
   d.columns=A(r.columns,200).map(function(x,i){
     x=x||{};
     return {
@@ -775,7 +776,7 @@ var dreamCtl=(function(){
     ring.style.setProperty('--step',step+'deg');
     sc.style.setProperty('--rk',(1.15/(2*Math.sin(Math.PI/g))).toFixed(3));
     DATA.dreams.forEach(function(d,i){
-      var c=h('div',{class:'dcard',style:'--i:'+i+';--rgb:'+DREAM_RGB[i%DREAM_RGB.length]},
+      var c=h('div',{class:'dcard',style:'--i:'+i+';--rgb:'+rgbOf(dreamColor(d,i))},
         h('span',{class:'dn'},(i+1)+' / '+n),h('strong',null,d.a,h('br'),d.b));
       ring.append(c);cards.push(c);
     });
@@ -938,7 +939,7 @@ function saveCfg(){ls.set('ms.cfg',JSON.stringify(CFG))}
 function connected(){return !!(CFG.owner&&CFG.repo&&CFG.token)}
 
 var connNote='',adminEl=null,adminOn=false,adminTab='basic',BASE=null,REMOTE_IMGS=[],publishing=false,remoteLoaded=false;
-var TABS=[['basic','기본'],['history','연혁'],['dream','되고 싶은 것'],['column','칼럼'],['writing','기고'],['connect','연결']];
+var TABS=[['basic','기본'],['history','연혁'],['dream','되고 싶은 것'],['column','칼럼'],['writing','집필'],['connect','연결']];
 
 /* 사진은 게시하기 전까지 이 기기에 보관한다 (앱을 닫아도 남도록 IndexedDB 사용) */
 function idbOpen(){return new Promise(function(res,rej){
@@ -1135,8 +1136,30 @@ function tHistory(b){
       ctl(DATA.history,i,redo)));
   });
 }
+function colorPick(it,i){
+  var wrap=h('div',{class:'a-lab'},h('span',null,'카드 색'));
+  var row=h('div',{class:'a-row sw-row'});
+  var sw=[];
+  function mark(){
+    var cur=dreamColor(it,i).toLowerCase();
+    sw.forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-c')===cur?'true':'false')});
+    custom.value=cur;
+  }
+  var custom=h('input',{type:'color',class:'sw-custom','aria-label':'직접 색 고르기'});
+  function pick(c){it.c=c.toLowerCase();mark();touch()}
+  NEON.forEach(function(n){
+    var b=h('button',{type:'button',class:'sw','data-c':n[0],'aria-label':n[1],'aria-pressed':'false',style:'--c:'+n[0]});
+    b.addEventListener('click',function(){pick(n[0])});
+    sw.push(b);row.append(b);
+  });
+  custom.addEventListener('input',function(){pick(custom.value)});
+  row.append(h('label',{class:'sw-own'},custom,h('span',null,'직접 고르기')));
+  mark();
+  wrap.append(row);
+  return wrap;
+}
 function tDream(b){
-  b.append(btn('+ 카드 추가',function(){DATA.dreams.push({a:'',b:'사람',d:''});redo()},'pri'));
+  b.append(btn('+ 카드 추가',function(){DATA.dreams.push({a:'',b:'사람',d:'',c:NEON[DATA.dreams.length%NEON.length][0]});redo()},'pri'));
   b.append(h('p',{class:'a-note'},'카드 앞면은 두 줄이에요. 예: 첫째 줄 "만드는", 둘째 줄 "사람".'));
   DATA.dreams.forEach(function(it,i){
     b.append(h('div',{class:'a-card'},
@@ -1144,6 +1167,7 @@ function tDream(b){
         h('div',{style:'flex:1 1 140px;min-width:0'},field('첫째 줄',function(){return it.a},function(v){it.a=v},{max:20})),
         h('div',{style:'flex:1 1 140px;min-width:0'},field('둘째 줄',function(){return it.b},function(v){it.b=v},{max:20}))),
       field('설명',function(){return it.d},function(v){it.d=v},{area:1,rows:3,max:600}),
+      colorPick(it,i),
       ctl(DATA.dreams,i,redo)));
   });
 }
@@ -1194,7 +1218,7 @@ function pickPhoto(col){
   f.click();
 }
 function tWriting(b){
-  b.append(btn('+ 기고 추가',function(){DATA.writings.unshift({date:today(),m:'',t:'',s:''});redo()},'pri'));
+  b.append(btn('+ 집필 추가',function(){DATA.writings.unshift({date:today(),m:'',t:'',s:''});redo()},'pri'));
   DATA.writings.forEach(function(w,i){
     b.append(h('div',{class:'a-card'},
       field('날짜 (예: 2026.10)',function(){return w.date},function(v){w.date=v},{max:20}),
